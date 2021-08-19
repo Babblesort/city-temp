@@ -15,10 +15,10 @@ class TempsState extends ChangeNotifier {
   }
 
   TempsState() {
-    cityWeathers = List.from([
+    cityWeathers = [
       CityWeather(city: 'Chicago'),
       CityWeather(city: 'Atlanta'),
       CityWeather(city: 'Denver')
-    ]);
+    ];
   }
 }
