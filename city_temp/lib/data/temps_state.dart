@@ -1,21 +1,24 @@
-import 'dart:async';
 import 'package:city_temp/data/city_weather.dart';
+import 'package:flutter/foundation.dart';
 
-class TempsState {
-  final List<CityWeather> _cityWeathers = List.from([
-    CityWeather(city: 'Chicago'),
-    CityWeather(city: 'Atlanta'),
-    CityWeather(city: 'Denver')
-  ]);
+class TempsState extends ChangeNotifier {
+  List<CityWeather> cityWeathers = <CityWeather>[];
 
-  StreamController<List<CityWeather>> _cityWeathersController =
-      StreamController.broadcast();
+  void addCity(String cityName) {
+    cityWeathers.add(CityWeather(city: cityName));
+    notifyListeners();
+  }
 
-  Stream<List<CityWeather>> get cityWeathers => _cityWeathersController.stream;
+  void clearCities() {
+    cityWeathers.clear();
+    notifyListeners();
+  }
 
   TempsState() {
-    _cityWeathersController.onListen = () {
-      _cityWeathersController.add(_cityWeathers);
-    };
+    cityWeathers = List.from([
+      CityWeather(city: 'Chicago'),
+      CityWeather(city: 'Atlanta'),
+      CityWeather(city: 'Denver')
+    ]);
   }
 }
