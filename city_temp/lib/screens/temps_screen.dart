@@ -1,5 +1,7 @@
 import 'package:city_temp/blocs/weather_bloc.dart';
+import 'package:city_temp/blocs/weather_events.dart';
 import 'package:city_temp/blocs/weather_state.dart';
+import 'package:city_temp/data/city_weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +15,10 @@ class TempsScreen extends StatelessWidget {
       body: Container(padding: EdgeInsets.all(16), child: WeathersList()),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          BlocProvider.of<WeatherBloc>(context)
+              .add(WeatherAdded(CityWeather(city: 'stuff')));
+        },
       ),
     );
   }

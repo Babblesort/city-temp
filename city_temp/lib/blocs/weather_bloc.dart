@@ -11,7 +11,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     if (event is WeatherLoaded) {
       yield* _mapWeatherLoadedToState();
     } else if (event is WeatherAdded) {
-      // yield* _mapWeatherAddedToState(event);
+      yield* _mapWeatherAddedToState(event);
     }
   }
 
@@ -21,6 +21,14 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       yield WeatherLoadSuccess(weathers: weathers);
     } catch (_) {
       yield WeatherLoadFailure();
+    }
+  }
+
+  Stream<WeatherState> _mapWeatherAddedToState(WeatherAdded event) async* {
+    if (state is WeatherLoadSuccess) {
+      final List<CityWeather> updatedWeathers =
+          List.from((state as WeatherLoadSuccess).weathers)..add(event.weather);
+      yield WeatherLoadSuccess(weathers: updatedWeathers);
     }
   }
 
