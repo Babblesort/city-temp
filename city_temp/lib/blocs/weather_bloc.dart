@@ -33,7 +33,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   }
 
   Future<List<CityWeather>> _fakeLoadWeathers() async {
-    return Future.delayed(Duration(milliseconds: 2000)).then((onValue) => [
+    return Future.delayed(Duration(milliseconds: 5000)).then((onValue) => [
           CityWeather(city: 'Chicago'),
           CityWeather(city: 'Atlanta'),
           CityWeather(city: 'Denver')

@@ -54,9 +54,18 @@ class WeatherLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        'Loading Weather...',
-        style: TextStyle(fontSize: 24, color: Theme.of(context).accentColor),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(48),
+            child: CircularProgressIndicator(),
+          ),
+          Text(
+            'Loading Weather',
+            style:
+                TextStyle(fontSize: 24, color: Theme.of(context).accentColor),
+          ),
+        ],
       ),
     );
   }
