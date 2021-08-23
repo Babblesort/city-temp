@@ -4,6 +4,7 @@ import 'package:city_temp/blocs/weather_state.dart';
 import 'package:city_temp/data/weather_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class TempsScreen extends StatelessWidget {
   const TempsScreen({Key? key}) : super(key: key);
@@ -17,7 +18,9 @@ class TempsScreen extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () async {
           try {
-            var cityWeather = await WeatherService().getCityWeather('Boston');
+            var cityWeather =
+                await Provider.of<WeatherService>(context, listen: false)
+                    .getCityWeather('Boston');
             BlocProvider.of<WeatherBloc>(context)
                 .add(WeatherAdded(cityWeather));
           } catch (e) {
