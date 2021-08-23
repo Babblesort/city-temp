@@ -1,16 +1,16 @@
-import 'package:city_temp/data/city_weather.dart';
-
 abstract class WeatherEvent {}
 
-class WeatherLoaded extends WeatherEvent {
-  @override
-  String toString() => 'WeatherLoaded {}';
+class CitiesLoaded extends WeatherEvent {
+  final List<String> cityNames;
+  CitiesLoaded({required this.cityNames});
 }
 
-class WeatherAdded extends WeatherEvent {
-  final CityWeather weather;
-  WeatherAdded(this.weather);
+class CityAdded extends WeatherEvent {
+  final String cityName;
+  CityAdded({required this.cityName});
+}
 
-  @override
-  String toString() => 'WeatherAdded {city: $weather.city}';
+class CityRemoved extends WeatherEvent {
+  final String cityName;
+  CityRemoved({required this.cityName});
 }

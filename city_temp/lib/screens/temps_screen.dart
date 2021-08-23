@@ -1,14 +1,13 @@
 import 'package:city_temp/blocs/weather_bloc.dart';
 import 'package:city_temp/blocs/weather_events.dart';
 import 'package:city_temp/blocs/weather_state.dart';
-import 'package:city_temp/data/city_weather.dart';
-import 'package:city_temp/data/weather_service.dart';
+import 'package:city_temp/data/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class TempsScreen extends StatelessWidget {
-  const TempsScreen({Key? key}) : super(key: key);
+  TempsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +18,10 @@ class TempsScreen extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () async {
           try {
-            var cityWeather =
-                await Provider.of<WeatherService>(context, listen: false)
-                    .getCityWeather('Boston');
+            final cityName = 'Boston';
+            Provider.of<Prefs>(context, listen: false).addCity(cityName);
             BlocProvider.of<WeatherBloc>(context)
-                .add(WeatherAdded(cityWeather));
+                .add(CityAdded(cityName: cityName));
           } catch (e) {
             // show something
           }
@@ -41,10 +39,10 @@ class WeathersList extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16),
       child: BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
-        if (state is WeatherLoadInProgress) {
+        if (state is LoadCitiesInProgress) {
           return WeatherLoading();
-        } else if (state is WeatherLoadSuccess) {
-          return WeatherListView(weathers: state.weathers);
+        } else if (state is LoadCitiesSuccess) {
+          return WeatherListView(cityNames: state.cityNames);
         }
         return Text('error');
       }),
@@ -53,16 +51,24 @@ class WeathersList extends StatelessWidget {
 }
 
 class WeatherListView extends StatelessWidget {
-  final List<CityWeather> weathers;
-  WeatherListView({Key? key, required this.weathers}) : super(key: key);
+  final List<String> cityNames;
+  WeatherListView({Key? key, required this.cityNames}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: weathers
-          .map((e) => ListTile(
-                title: Text(e.city),
-              ))
+      children: cityNames
+          .map(
+            (cityName) => Dismissible(
+              key: UniqueKey(),
+              child: ListTile(title: Text(cityName)),
+              onDismissed: (_) async {
+                Provider.of<Prefs>(context, listen: false).removeCity(cityName);
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(CityRemoved(cityName: cityName));
+              },
+            ),
+          )
           .toList(),
     );
   }

@@ -1,12 +1,10 @@
-import 'package:city_temp/data/city_weather.dart';
-
 abstract class WeatherState {}
 
-class WeatherLoadInProgress extends WeatherState {}
+class LoadCitiesInProgress extends WeatherState {}
 
-class WeatherLoadSuccess extends WeatherState {
-  final List<CityWeather> weathers;
-  WeatherLoadSuccess({this.weathers = const []});
+class LoadCitiesSuccess extends WeatherState {
+  final List<String> cityNames;
+  LoadCitiesSuccess({this.cityNames = const []});
 }
 
-class WeatherLoadFailure extends WeatherState {}
+class LoadCitiesFailure extends WeatherState {}

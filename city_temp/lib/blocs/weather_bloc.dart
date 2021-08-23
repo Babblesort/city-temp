@@ -1,42 +1,40 @@
 import 'package:city_temp/blocs/weather_events.dart';
 import 'package:city_temp/blocs/weather_state.dart';
-import 'package:city_temp/data/city_weather.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherBloc() : super(WeatherLoadInProgress());
+  WeatherBloc() : super(LoadCitiesInProgress());
 
   @override
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
-    if (event is WeatherLoaded) {
-      yield* _mapWeatherLoadedToState();
-    } else if (event is WeatherAdded) {
-      yield* _mapWeatherAddedToState(event);
+    if (event is CitiesLoaded) {
+      yield* _mapCitiesLoadedToState(event);
+    } else if (event is CityAdded) {
+      yield* _mapCityAddedToState(event);
+    } else if (event is CityRemoved) {
+      yield* _mapCityRemovedToState(event);
     }
   }
 
-  Stream<WeatherState> _mapWeatherLoadedToState() async* {
-    try {
-      final weathers = await _fakeLoadWeathers();
-      yield WeatherLoadSuccess(weathers: weathers);
-    } catch (_) {
-      yield WeatherLoadFailure();
+  Stream<WeatherState> _mapCitiesLoadedToState(CitiesLoaded event) async* {
+    yield LoadCitiesSuccess(cityNames: event.cityNames);
+  }
+
+  Stream<WeatherState> _mapCityAddedToState(CityAdded event) async* {
+    if (state is LoadCitiesSuccess) {
+      var currentCities = (state as LoadCitiesSuccess).cityNames;
+      var updatedCities = [...currentCities, event.cityName];
+      yield LoadCitiesSuccess(cityNames: updatedCities);
     }
   }
 
-  Stream<WeatherState> _mapWeatherAddedToState(WeatherAdded event) async* {
-    if (state is WeatherLoadSuccess) {
-      final List<CityWeather> updatedWeathers =
-          List.from((state as WeatherLoadSuccess).weathers)..add(event.weather);
-      yield WeatherLoadSuccess(weathers: updatedWeathers);
-    }
-  }
+  Stream<WeatherState> _mapCityRemovedToState(CityRemoved event) async* {
+    if (state is LoadCitiesSuccess) {
+      final List<String> cities = List.from(
+          (state as LoadCitiesSuccess).cityNames
+            ..retainWhere((cityName) => cityName != event.cityName));
 
-  Future<List<CityWeather>> _fakeLoadWeathers() async {
-    return Future.delayed(Duration(milliseconds: 5000)).then((onValue) => [
-          CityWeather(city: 'Chicago'),
-          CityWeather(city: 'Atlanta'),
-          CityWeather(city: 'Denver')
-        ]);
+      yield LoadCitiesSuccess(cityNames: cities);
+    }
   }
 }
