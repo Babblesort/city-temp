@@ -15,7 +15,7 @@ class CityWeather {
       this.humidity = 0});
 
   CityWeather.fromJson(Map<String, dynamic> weatherMap) {
-    this.city = weatherMap['city'];
+    this.city = weatherMap['name'];
     this.temperature = (weatherMap['main']['temp'] * (9 / 5) - 459.67) ?? 0;
     this.perceivedTemperature =
         (weatherMap['main']['feels_like'] * (9 / 5) - 459.67) ?? 0;
