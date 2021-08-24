@@ -6,14 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-class TempsScreen extends StatelessWidget {
+class TempsScreen extends StatefulWidget {
   TempsScreen({Key? key}) : super(key: key);
+
+  @override
+  _TempsScreenState createState() => _TempsScreenState();
+}
+
+class _TempsScreenState extends State<TempsScreen> {
+  final txtCityName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('City Temps')),
-      body: WeathersList(),
+      body: _weathersList(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
@@ -29,33 +36,22 @@ class TempsScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class WeathersList extends StatelessWidget {
-  const WeathersList({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _weathersList() {
     return Container(
       padding: EdgeInsets.all(16),
       child: BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
         if (state is LoadCitiesInProgress) {
-          return WeatherLoading();
+          return _weatherLoading();
         } else if (state is LoadCitiesSuccess) {
-          return WeatherListView(cityNames: state.cityNames);
+          return _weatherListView(context, state.cityNames);
         }
         return Text('error');
       }),
     );
   }
-}
 
-class WeatherListView extends StatelessWidget {
-  final List<String> cityNames;
-  WeatherListView({Key? key, required this.cityNames}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _weatherListView(BuildContext context, List<String> cityNames) {
     return ListView(
       children: cityNames
           .map(
@@ -72,15 +68,8 @@ class WeatherListView extends StatelessWidget {
           .toList(),
     );
   }
-}
 
-class WeatherLoading extends StatelessWidget {
-  const WeatherLoading({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _weatherLoading() {
     return Center(
       child: Column(
         children: [
