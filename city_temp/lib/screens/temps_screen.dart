@@ -88,6 +88,7 @@ class _TempsScreenState extends State<TempsScreen> {
             title: Text('Enter a city name'),
             content: SingleChildScrollView(
               child: TextField(
+                autofocus: true,
                 controller: txtCityName,
                 decoration: InputDecoration(hintText: 'City Name'),
               ),

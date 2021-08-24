@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 void main() async {
   await dotenv.load(fileName: '.env');
 
-  var _prefs = Prefs();
+  final _prefs = Prefs();
   await _prefs.init();
 
   final _prefsProvider = Provider<Prefs>(create: (_) => _prefs);
