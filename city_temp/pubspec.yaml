@@ -50,6 +50,9 @@ flutter:
 
   assets:
     - .env
+    - images/clear.jpg
+    - images/cloudy.jpg
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

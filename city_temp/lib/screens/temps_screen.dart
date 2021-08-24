@@ -34,7 +34,7 @@ class _TempsScreenState extends State<TempsScreen> {
 
   Widget _weathersList() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(8),
       child: BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
         if (state is LoadCitiesInProgress) {
           return WeatherLoading(context: context);

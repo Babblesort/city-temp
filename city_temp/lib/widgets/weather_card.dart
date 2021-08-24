@@ -19,57 +19,66 @@ class WeatherCard extends StatelessWidget {
             width: MediaQuery.of(context).size.width - 50,
             height: 300,
             child: Card(
-              elevation: 4,
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                elevation: 4,
+                child: Stack(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          weather.city,
-                          style: TextStyle(
-                              fontSize: 32,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        Text(
-                          '${weather.temperature.toStringAsFixed(0)}\u00B0',
-                          style: TextStyle(
-                              fontSize: 38,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                      ],
+                    Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage('images/clear.jpg'))),
                     ),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          weather.description,
-                          style: TextStyle(
-                              fontSize: 26,
-                              color: Theme.of(context).primaryColor),
-                        ),
+                    Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                weather.city,
+                                style: TextStyle(
+                                    fontSize: 32,
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              Text(
+                                '${weather.temperature.toStringAsFixed(0)}\u00B0',
+                                style: TextStyle(
+                                    fontSize: 38,
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                weather.description,
+                                style: TextStyle(
+                                    fontSize: 26,
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                          ),
+                          weatherRow(
+                              context: context,
+                              label: 'Feels Like',
+                              value:
+                                  '${weather.perceivedTemperature.toStringAsFixed(0)}\u00B0'),
+                          weatherRow(
+                              context: context,
+                              label: 'Humidity',
+                              value: '${weather.humidity.toStringAsFixed(0)}%'),
+                          weatherRow(
+                              context: context,
+                              label: 'Pressure',
+                              value:
+                                  '${weather.pressure.toStringAsFixed(0)} millibars'),
+                        ],
                       ),
                     ),
-                    weatherRow(
-                        context: context,
-                        label: 'Feels Like',
-                        value:
-                            '${weather.perceivedTemperature.toStringAsFixed(0)}\u00B0'),
-                    weatherRow(
-                        context: context,
-                        label: 'Humidity',
-                        value: '${weather.humidity.toStringAsFixed(0)}%'),
-                    weatherRow(
-                        context: context,
-                        label: 'Pressure',
-                        value:
-                            '${weather.pressure.toStringAsFixed(0)} millibars'),
                   ],
-                ),
-              ),
-            ),
+                )),
           );
         }
         return SizedBox(
@@ -77,10 +86,7 @@ class WeatherCard extends StatelessWidget {
           height: 300,
           child: Card(
             elevation: 4,
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: WeatherLoading(context: context),
-            ),
+            child: WeatherLoading(context: context),
           ),
         );
       },
@@ -99,15 +105,19 @@ class WeatherCard extends StatelessWidget {
               flex: 2,
               child: Text(
                 label,
-                style:
-                    TextStyle(fontSize: 20, color: Theme.of(context).hintColor),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).hintColor,
+                ),
               )),
           Expanded(
               flex: 4,
               child: Text(
                 value,
                 style: TextStyle(
-                    fontSize: 20, color: Theme.of(context).primaryColor),
+                  fontSize: 20,
+                  color: Theme.of(context).primaryColor,
+                ),
               )),
         ],
       ),
