@@ -23,15 +23,8 @@ class _TempsScreenState extends State<TempsScreen> {
       body: _weathersList(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () async {
-          try {
-            final cityName = 'Boston';
-            Provider.of<Prefs>(context, listen: false).addCity(cityName);
-            BlocProvider.of<WeatherBloc>(context)
-                .add(CityAdded(cityName: cityName));
-          } catch (e) {
-            // show something
-          }
+        onPressed: () {
+          showAddCityDialog(context);
         },
       ),
     );
@@ -85,5 +78,46 @@ class _TempsScreenState extends State<TempsScreen> {
         ],
       ),
     );
+  }
+
+  Future<dynamic> showAddCityDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Enter a city name'),
+            content: SingleChildScrollView(
+              child: TextField(
+                controller: txtCityName,
+                decoration: InputDecoration(hintText: 'City Name'),
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  txtCityName.text = '';
+                },
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    try {
+                      var cityName = txtCityName.text;
+                      Provider.of<Prefs>(context, listen: false)
+                          .addCity(cityName);
+                      BlocProvider.of<WeatherBloc>(context)
+                          .add(CityAdded(cityName: cityName));
+                    } catch (e) {
+                      // show something
+                    } finally {
+                      txtCityName.text = '';
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text('Add City'))
+            ],
+          );
+        });
   }
 }
