@@ -48,9 +48,11 @@ class _TempsScreenState extends State<TempsScreen> {
 
   Widget _weatherListView(BuildContext context, List<String> cityNames) {
     return ListView(
+      scrollDirection: Axis.horizontal,
       children: cityNames
           .map(
             (cityName) => Dismissible(
+              direction: DismissDirection.vertical,
               key: UniqueKey(),
               child: WeatherCard(cityName: cityName),
               onDismissed: (_) async {

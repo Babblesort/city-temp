@@ -16,13 +16,14 @@ class WeatherCard extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           CityWeather weather = snapshot.data;
           return SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width - 50,
             height: 300,
             child: Card(
               elevation: 4,
               child: Padding(
                 padding: EdgeInsets.all(8),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,16 +44,12 @@ class WeatherCard extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 180),
-                          child: Text(
-                            weather.description,
-                            style: TextStyle(
-                                fontSize: 26,
-                                color: Theme.of(context).primaryColor),
-                          ),
+                        Text(
+                          weather.description,
+                          style: TextStyle(
+                              fontSize: 26,
+                              color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),
