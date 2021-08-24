@@ -21,7 +21,7 @@ class WeatherCard extends StatelessWidget {
             child: Card(
               elevation: 4,
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -42,17 +42,30 @@ class WeatherCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
+                    Expanded(
+                      child: Center(
+                        child: Text(
                           weather.description,
                           style: TextStyle(
                               fontSize: 26,
                               color: Theme.of(context).primaryColor),
                         ),
-                      ],
+                      ),
                     ),
+                    weatherRow(
+                        context: context,
+                        label: 'Feels Like',
+                        value:
+                            '${weather.perceivedTemperature.toStringAsFixed(0)}\u00B0'),
+                    weatherRow(
+                        context: context,
+                        label: 'Humidity',
+                        value: '${weather.humidity.toStringAsFixed(0)}%'),
+                    weatherRow(
+                        context: context,
+                        label: 'Pressure',
+                        value:
+                            '${weather.pressure.toStringAsFixed(0)} millibars'),
                   ],
                 ),
               ),
@@ -72,5 +85,33 @@ class WeatherCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget weatherRow(
+      {required BuildContext context,
+      required String label,
+      required String value}) {
+    Widget row = Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: Text(
+                label,
+                style:
+                    TextStyle(fontSize: 20, color: Theme.of(context).hintColor),
+              )),
+          Expanded(
+              flex: 4,
+              child: Text(
+                value,
+                style: TextStyle(
+                    fontSize: 20, color: Theme.of(context).primaryColor),
+              )),
+        ],
+      ),
+    );
+    return row;
   }
 }
