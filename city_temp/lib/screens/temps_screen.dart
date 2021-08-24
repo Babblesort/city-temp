@@ -1,7 +1,9 @@
 import 'package:city_temp/blocs/weather_bloc.dart';
 import 'package:city_temp/blocs/weather_events.dart';
 import 'package:city_temp/blocs/weather_state.dart';
+import 'package:city_temp/data/city_weather.dart';
 import 'package:city_temp/data/prefs.dart';
+import 'package:city_temp/data/weather_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +52,7 @@ class _TempsScreenState extends State<TempsScreen> {
           .map(
             (cityName) => Dismissible(
               key: UniqueKey(),
-              child: ListTile(title: Text(cityName)),
+              child: _weatherTile(context, cityName),
               onDismissed: (_) async {
                 Provider.of<Prefs>(context, listen: false).removeCity(cityName);
                 BlocProvider.of<WeatherBloc>(context)
@@ -59,6 +61,23 @@ class _TempsScreenState extends State<TempsScreen> {
             ),
           )
           .toList(),
+    );
+  }
+
+  Widget _weatherTile(BuildContext context, String cityName) {
+    return FutureBuilder(
+      future: Provider.of<WeatherService>(context).getCityWeather(cityName),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          CityWeather weather = snapshot.data;
+          return ListTile(
+              isThreeLine: true,
+              subtitle: Text(
+                  'Description: ${weather.description}\nTemp: ${weather.temperature.toStringAsFixed(0)}'),
+              title: Text(weather.city));
+        }
+        return ListTile(title: Text('Loading $cityName'));
+      },
     );
   }
 
